@@ -1,8 +1,12 @@
 import { type KonvaEventObject } from 'konva/lib/Node'
 import { Shape } from 'konva/lib/Shape'
 import { Stage, Layer, Rect, Text, Group } from 'react-konva'
+import useSound from 'use-sound'
+import Sound from './assets/audio/おいす.wav'
 
 const Canvas = (): JSX.Element => {
+  const [play] = useSound(Sound)
+
   const wordData = [
     [
       'マヨネーズ',
@@ -48,6 +52,7 @@ const Canvas = (): JSX.Element => {
 
   const handleClick = (e: KonvaEventObject<MouseEvent>): void => {
     // console.log(e.target.attrs.text)
+    play()
     const rect = e.target
     if (rect instanceof Shape) {
       rect?.fill('yellow')
