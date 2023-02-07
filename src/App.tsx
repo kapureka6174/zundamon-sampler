@@ -1,5 +1,11 @@
+import Canvas from './Canvas'
+
 const App = (): JSX.Element => {
-  return <div>Hello</div>
+  return (
+    <div>
+      <Canvas />
+    </div>
+  )
 }
 
 export default App
