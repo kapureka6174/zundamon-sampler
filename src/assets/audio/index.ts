@@ -31,50 +31,85 @@ import B5 from './今日は.wav'
 import C5 from './太陽.wav'
 
 interface DataType {
-  audio?: string
+  note: string
+  audio: string
   word: string
 }
 
 export const Data: DataType[] = [
-  { word: '/' },
-  { audio: A1, word: 'あざす' },
-  { audio: B1, word: 'いっぞ' },
-  { audio: C1, word: 'おいす' },
-  { audio: D1, word: 'おっほ' },
-  { audio: E1, word: 'オムライス' },
-  { audio: F1, word: 'ゲス' },
-  { audio: G1, word: 'ケロッ' },
-  { audio: A2, word: 'コロコロ' },
-  { audio: B2, word: 'ずん' },
-  { audio: C2, word: 'チュ' },
-  { audio: D2, word: 'だっちゃ' },
-  { audio: E2, word: 'ですけど' },
-  { audio: F2, word: 'ですわ' },
-  { audio: G2, word: 'なのだ' },
-  { audio: A3, word: 'なすび' },
-  { audio: B3, word: 'にゃん' },
-  { audio: C3, word: 'ぱおん' },
-  { audio: D3, word: 'はいっ' },
-  { audio: E3, word: 'はっ' },
-  { audio: F3, word: 'ぴえん' },
-  { audio: G3, word: 'ヒヤシンス' },
-  { audio: A4, word: 'ピョン' },
-  { audio: B4, word: 'ピヨピヨ' },
-  { audio: C4, word: 'ぷっぴ' },
-  { audio: D4, word: 'ぽん' },
-  { audio: E4, word: 'マヨネーズ' },
-  { audio: F4, word: 'よっ' },
-  { audio: G4, word: 'ワロタ' },
-  { audio: A5, word: '何すか' },
-  { audio: B5, word: '今日は' },
-  { audio: C5, word: '太陽' }
+  { note: 'A1', audio: A1, word: 'あざす' },
+  { note: 'B1', audio: B1, word: 'いっぞ' },
+  { note: 'C1', audio: C1, word: 'おいす' },
+  { note: 'D1', audio: D1, word: 'おっほ' },
+  { note: 'E1', audio: E1, word: 'オムライス' },
+  { note: 'F1', audio: F1, word: 'ゲス' },
+  { note: 'G1', audio: G1, word: 'ケロッ' },
+  { note: 'A2', audio: A2, word: 'コロコロ' },
+  { note: 'B2', audio: B2, word: 'ずん' },
+  { note: 'C2', audio: C2, word: 'チュ' },
+  { note: 'D2', audio: D2, word: 'だっちゃ' },
+  { note: 'E2', audio: E2, word: 'ですけど' },
+  { note: 'F2', audio: F2, word: 'ですわ' },
+  { note: 'G2', audio: G2, word: 'なのだ' },
+  { note: 'A3', audio: A3, word: 'なすび' },
+  { note: 'B3', audio: B3, word: 'にゃん' },
+  { note: 'C3', audio: C3, word: 'ぱおん' },
+  { note: 'D3', audio: D3, word: 'はいっ' },
+  { note: 'E3', audio: E3, word: 'はっ' },
+  { note: 'F3', audio: F3, word: 'ぴえん' },
+  { note: 'G3', audio: G3, word: 'ヒヤシンス' },
+  { note: 'A4', audio: A4, word: 'ピョン' },
+  { note: 'B4', audio: B4, word: 'ピヨピヨ' },
+  { note: 'C4', audio: C4, word: 'ぷっぴ' },
+  { note: 'D4', audio: D4, word: 'ぽん' },
+  { note: 'E4', audio: E4, word: 'マヨネーズ' },
+  { note: 'F4', audio: F4, word: 'よっ' },
+  { note: 'G4', audio: G4, word: 'ワロタ' },
+  { note: 'A5', audio: A5, word: '何すか' },
+  { note: 'B5', audio: B5, word: '今日は' },
+  { note: 'C5', audio: C5, word: '太陽' }
 ]
+
+export const audioData: Record<string, string> = {
+  A1,
+  B1,
+  C1,
+  D1,
+  E1,
+  F1,
+  G1,
+  A2,
+  B2,
+  C2,
+  D2,
+  E2,
+  F2,
+  G2,
+  A3,
+  B3,
+  C3,
+  D3,
+  E3,
+  F3,
+  G3,
+  A4,
+  B4,
+  C4,
+  D4,
+  E4,
+  F4,
+  G4,
+  A5,
+  B5,
+  C5
+}
 
 const DEFEAULT_COLUMN = 8
 const RESPONSIVE_COLUMN = 4
 
 const initData = (column: number): string[][] => {
   const wordData = Data.map(data => data.word)
+  wordData.unshift('/')
   const data = []
   for (let i = 0; i < wordData.length / column; i++) {
     data.push(wordData.slice(i * column, i * column + column))

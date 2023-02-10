@@ -1,32 +1,59 @@
 import { type KonvaEventObject } from 'konva/lib/Node'
 import { Shape } from 'konva/lib/Shape'
 import { Stage, Layer, Rect, Text, Group } from 'react-konva'
-import { defaultWordData, responsiveWordData } from './assets/audio'
+import {
+  Data,
+  audioData,
+  defaultWordData,
+  responsiveWordData
+} from './assets/audio'
 import useWindowDimensions from './useWindowDimensions'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { Sampler } from 'tone'
 
 const Canvas = (): JSX.Element => {
   const { width } = useWindowDimensions()
   const [wordData, setWordData] = useState<string[][]>(defaultWordData)
+  const [isLoaded, setLoaded] = useState(false)
+  const sampler = useRef<Sampler | null>(null)
+
+  useEffect(() => {
+    sampler.current = new Sampler(audioData, {
+      onload: () => {
+        setLoaded(true)
+      }
+    }).toDestination()
+  }, [])
 
   useEffect(() => {
     setWordData(width >= 920 ? defaultWordData : responsiveWordData)
   }, [width])
 
   const handleClick = (e: KonvaEventObject<MouseEvent>): void => {
-    // console.log(e.target.attrs.text)
+    const note: string | undefined = Data.find(
+      data => data.word === e.target.name()
+    )?.note
+
+    if (note !== undefined) {
+      sampler.current?.triggerAttack(note)
+    }
+
     const rect = e.target
     if (rect instanceof Shape) {
       rect?.fill('yellow')
       rect?.to({
         fill: 'white',
-        duration: 0.05
+        duration: 0.03
       })
     }
   }
 
   return (
-    <Stage width={window.innerWidth} height={window.innerHeight}>
+    <Stage
+      visible={isLoaded}
+      width={window.innerWidth}
+      height={window.innerHeight}
+    >
       <Layer opacity={0.4}>
         {wordData.map((wordLists, y) => {
           return wordLists.map((word, x) => {
@@ -53,6 +80,7 @@ const Canvas = (): JSX.Element => {
                   height={window.innerHeight / wordData.length}
                   stroke="black"
                   fill="white"
+                  name={word}
                 />
               </Group>
             )
