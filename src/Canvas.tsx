@@ -1,58 +1,20 @@
 import { type KonvaEventObject } from 'konva/lib/Node'
 import { Shape } from 'konva/lib/Shape'
 import { Stage, Layer, Rect, Text, Group } from 'react-konva'
-import useSound from 'use-sound'
-import Sound from './assets/audio/おいす.wav'
+import { defaultWordData, responsiveWordData } from './assets/audio'
+import useWindowDimensions from './useWindowDimensions'
+import { useState, useEffect } from 'react'
 
 const Canvas = (): JSX.Element => {
-  const [play] = useSound(Sound)
+  const { width } = useWindowDimensions()
+  const [wordData, setWordData] = useState<string[][]>(defaultWordData)
 
-  const wordData = [
-    [
-      'マヨネーズ',
-      '春',
-      'キャンバス',
-      'ずんだもん',
-      'はっ',
-      'ふー',
-      'ほい',
-      'えっ'
-    ],
-    [
-      'マヨネーズ',
-      '春',
-      'キャンバス',
-      'ずんだもん',
-      'はっ',
-      'ふー',
-      'ほい',
-      'えっ'
-    ],
-    [
-      'マヨネーズ',
-      '春',
-      'キャンバス',
-      'ずんだもん',
-      'はっ',
-      'ふー',
-      'ほい',
-      'えっ'
-    ],
-    [
-      'マヨネーズ',
-      '春',
-      'キャンバス',
-      'ずんだもん',
-      'はっ',
-      'ふー',
-      'ほい',
-      'えっ'
-    ]
-  ]
+  useEffect(() => {
+    setWordData(width >= 920 ? defaultWordData : responsiveWordData)
+  }, [width])
 
   const handleClick = (e: KonvaEventObject<MouseEvent>): void => {
     // console.log(e.target.attrs.text)
-    play()
     const rect = e.target
     if (rect instanceof Shape) {
       rect?.fill('yellow')
