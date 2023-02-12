@@ -31,12 +31,13 @@ import B5 from './今日は.wav'
 import C5 from './太陽.wav'
 
 interface DataType {
-  note: string
-  audio: string
+  note?: string
+  audio?: string
   word: string
 }
 
 export const Data: DataType[] = [
+  { word: '/' },
   { note: 'A1', audio: A1, word: 'あざす' },
   { note: 'B1', audio: B1, word: 'いっぞ' },
   { note: 'C1', audio: C1, word: 'おいす' },
@@ -109,7 +110,6 @@ const RESPONSIVE_COLUMN = 4
 
 const initData = (column: number): string[][] => {
   const wordData = Data.map(data => data.word)
-  wordData.unshift('/')
   const data = []
   for (let i = 0; i < wordData.length / column; i++) {
     data.push(wordData.slice(i * column, i * column + column))

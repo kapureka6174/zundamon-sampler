@@ -9,35 +9,57 @@ import {
 } from './assets/audio'
 import useWindowDimensions from './useWindowDimensions'
 import { useState, useEffect, useRef } from 'react'
-import { Sampler } from 'tone'
+import { Sampler, Part, Transport } from 'tone'
 
 const Canvas = (): JSX.Element => {
   const { width } = useWindowDimensions()
   const [wordData, setWordData] = useState<string[][]>(defaultWordData)
   const [isLoaded, setLoaded] = useState(false)
   const sampler = useRef<Sampler | null>(null)
+  const part = useRef<Part | null>(null)
 
+  // sampler init
   useEffect(() => {
     sampler.current = new Sampler(audioData, {
       onload: () => {
         setLoaded(true)
+        // part init
+        part.current = new Part(
+          (time, note) => {
+            sampler.current?.triggerAttackRelease(note, '4n', time)
+          },
+          [['2:0:0', 'B1']]
+        ).start()
+
+        part.current.loop = true
+        part.current.loopEnd = '1m'
+
+        Transport.bpm.value = 60
+        Transport.loop = true
+        Transport.loopEnd = '1m'
+        Transport.start()
       }
     }).toDestination()
   }, [])
 
+  // responsive
   useEffect(() => {
     setWordData(width >= 920 ? defaultWordData : responsiveWordData)
   }, [width])
 
   const handleClick = (e: KonvaEventObject<MouseEvent>): void => {
+    // add or remove note
     const note: string | undefined = Data.find(
       data => data.word === e.target.name()
     )?.note
+    const positionArray = String(Transport.position).split(':')
+    positionArray[2] = Math.floor(Number(positionArray[2])).toString()
+    const position = positionArray.join(':')
+    if (part.current?.at(position) !== null) part.current?.remove(position)
+    if (note !== undefined && e.target.name() !== '/')
+      part.current?.add(position, note)
 
-    if (note !== undefined) {
-      sampler.current?.triggerAttack(note)
-    }
-
+    // change bg color
     const rect = e.target
     if (rect instanceof Shape) {
       rect?.fill('yellow')
