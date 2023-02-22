@@ -56,8 +56,10 @@ const Canvas = (): JSX.Element => {
     positionArray[2] = Math.floor(Number(positionArray[2])).toString()
     const position = positionArray.join(':')
     if (part.current?.at(position) !== null) part.current?.remove(position)
-    if (note !== undefined && e.target.name() !== '/')
+    if (note !== undefined && e.target.name() !== '/') {
       part.current?.add(position, note)
+      sampler.current?.triggerAttack(note)
+    }
 
     // change bg color
     const rect = e.target
