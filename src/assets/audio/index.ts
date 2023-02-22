@@ -30,6 +30,8 @@ import A5 from './何すか.wav'
 import B5 from './今日は.wav'
 import C5 from './太陽.wav'
 
+import A0 from './bgm.wav'
+
 interface DataType {
   note?: string
   audio?: string
@@ -102,7 +104,8 @@ export const audioData: Record<string, string> = {
   G4,
   A5,
   B5,
-  C5
+  C5,
+  A0
 }
 
 const DEFEAULT_COLUMN = 8
