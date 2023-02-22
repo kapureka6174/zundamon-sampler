@@ -17,6 +17,7 @@ const Canvas = (): JSX.Element => {
   const [isLoaded, setLoaded] = useState(false)
   const sampler = useRef<Sampler | null>(null)
   const part = useRef<Part | null>(null)
+  const bgmPart = useRef<Part | null>(null)
 
   // sampler init
   useEffect(() => {
@@ -26,17 +27,27 @@ const Canvas = (): JSX.Element => {
         // part init
         part.current = new Part(
           (time, note) => {
-            sampler.current?.triggerAttackRelease(note, '4n', time)
+            sampler.current?.triggerAttackRelease(note, '2n', time)
           },
-          [['2:0:0', 'B1']]
+          [['0:0:0', 'B1']]
         ).start()
 
         part.current.loop = true
-        part.current.loopEnd = '1m'
+        part.current.loopEnd = '8m'
 
-        Transport.bpm.value = 60
+        bgmPart.current = new Part(
+          (time, note) => {
+            sampler.current?.triggerAttackRelease(note, '8m', time)
+          },
+          [['0:0:0', 'A0']]
+        ).start()
+
+        bgmPart.current.loop = true
+        bgmPart.current.loopEnd = '8m'
+
+        Transport.bpm.value = 120
         Transport.loop = true
-        Transport.loopEnd = '1m'
+        Transport.loopEnd = '8m'
         Transport.start()
       }
     }).toDestination()
