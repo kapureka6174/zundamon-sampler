@@ -59,12 +59,14 @@ const Canvas = (): JSX.Element => {
   }, [width])
 
   const handleClick = (e: KonvaEventObject<MouseEvent>): void => {
+    const group = e.currentTarget
+    group.listening(false)
     // add or remove note
     const note: string | undefined = Data.find(
       data => data.word === e.target.name()
     )?.note
     const positionArray = String(Transport.position).split(':')
-    positionArray[2] = Math.floor(Number(positionArray[2])).toString()
+    positionArray[2] = '0'
     const position = positionArray.join(':')
     if (part.current?.at(position) !== null) part.current?.remove(position)
     if (note !== undefined && e.target.name() !== '/') {
@@ -78,9 +80,13 @@ const Canvas = (): JSX.Element => {
       rect?.fill('yellow')
       rect?.to({
         fill: 'white',
-        duration: 0.03
+        duration: 0.01
       })
     }
+
+    setTimeout(() => {
+      group.listening(true)
+    }, 900)
   }
 
   return (
